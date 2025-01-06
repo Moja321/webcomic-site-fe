@@ -6,6 +6,7 @@ import SearchIcon2 from './search2.svg';
 
 import MovieCard from './MovieCard';
 import DarkMode from './DarkMode/DarkMode';
+import Navbar from './Components/Navbar/Navbar';
 
 //OMDB api key: ec451e8a
 
@@ -90,6 +91,7 @@ const App = () => {
         //changeImg1={()=>{setSearchImg(SearchIcon)}} changeImg2={()=>{setSearchImg(SearchIcon2)}}
         <div className="app">
             <DarkMode changeImg1={()=>{setSearchImg(SearchIcon)}} changeImg2={()=>{setSearchImg(SearchIcon2)}}/>
+            <Navbar />
             <h1>CoolMoviezDB</h1>
 
             <div className="search">
