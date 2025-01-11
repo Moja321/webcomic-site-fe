@@ -8,13 +8,19 @@ const DarkMode = ({changeImg1,changeImg2}) => {
     const setDarkMode = () => {
         document.querySelector("body").setAttribute('data-theme','dark');
         localStorage.setItem("selectedTheme","dark");
-        changeImg2();
+        if (changeImg2){
+            changeImg2();
+        }
+        
     }
 
     const setLightMode = () => {
         document.querySelector("body").setAttribute('data-theme','light');
         localStorage.setItem("selectedTheme","light");
-        changeImg1();
+        if (changeImg1){
+            changeImg1();
+        }
+        
     }
 
     const selectedTheme = localStorage.getItem("selectedTheme");

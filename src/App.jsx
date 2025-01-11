@@ -4,7 +4,7 @@ import './App.css';
 import SearchIcon from './search.svg';
 import SearchIcon2 from './search2.svg';
 
-import MovieCard from './MovieCard';
+import MovieCard from './Components/MovieCard';
 import DarkMode from './DarkMode/DarkMode';
 import Navbar from './Components/Navbar/Navbar';
 

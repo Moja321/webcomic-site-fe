@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MovieCard = ({movie,handleClick}) => { //normally (props) is used but using deconstructuring, we can pass movie1 into props by doing ({moviee1})
+const MovieCard = ({movie,handleClick}) => { //normally (props) is used but using deconstructuring, we can pass movie1 into props by doing ({movie1})
     return (
         <div className="movie" onClick={handleClick}>
             <div>

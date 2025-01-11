@@ -145,6 +145,14 @@ h1 {
   font-family: var(--font-raleway);
 }
 
+.register {
+  color: var(--body_color);
+}
+
+.login {
+  color: var(--body_color);
+}
+
 .container {
   width: 100%;
   margin-top: 3rem;
