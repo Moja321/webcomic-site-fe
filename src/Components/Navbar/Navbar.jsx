@@ -1,11 +1,12 @@
 import React from 'react'
 import './Navbar.css'
 
-const Navbar = () => {
+const Navbar = ({username}) => {
   return (
     <header className="header">
         <a href="" className="logo">Logo</a>
         <div className="bozo"></div>
+        <p>User logged-in: {username || "none"}  </p>
 
         <nav className="navbar">
             <a href="/" className="Home">Home</a>

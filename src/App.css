@@ -35,7 +35,7 @@
 }
 
 body {
-  padding-top: 70px;
+  padding-top: 30px;
   font-family: var(--font-roboto);
   /* font-family: var(--font-voltaire); */
   /* background-color: #212426; */
@@ -145,11 +145,7 @@ h1 {
   font-family: var(--font-raleway);
 }
 
-.register {
-  color: var(--body_color);
-}
-
-.login {
+.content {
   color: var(--body_color);
 }
 
