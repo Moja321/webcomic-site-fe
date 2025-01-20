@@ -1,198 +1,292 @@
 import React, { useEffect, useState } from 'react'; //import React object from 'react' library
+import { Route, Routes} from 'react-router-dom';
+
+//require("dotenv").config();
 
 import './App.css';
-import SearchIcon from './search.svg';
-import SearchIcon2 from './search2.svg';
 
-import MovieCard from './Components/MovieCard';
 import DarkMode from './DarkMode/DarkMode';
 import Navbar from './Components/Navbar/Navbar';
+import Comics from './Components/Pages/Comics';
+import Login from './Components/Pages/Login';
+import Home from './Components/Pages/Home';
 
-//OMDB api key: ec451e8a
-
-const API_URL = 'https://www.omdbapi.com?apikey=' + process.env.REACT_APP_API_KEY;
-
-const movie1 = {
-    "Title": "Batman Begins",
-    "Year": "2005",
-    "imdbID": "tt0372784",
-    "Type": "movie",
-    "Poster": "https://m.media-amazon.com/images/M/MV5BOTY4YjI2N2MtYmFlMC00ZjcyLTg3YjEtMDQyM2ZjYzQ5YWFkXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg"
-}
-
-//below 'App' variable is whats called a react component
 const App = () => {
+    const numbers = [{value1: 1, value2: 2, value3: 3},{value1: 4, value2: 5, value3: 6},{value1: 7, value2: 8, value3: 9}];
+    var createdUser;
+    //var loggedinUser;
+    const [loggedinUser, setLoggedinUser] = useState({user : "none"});
 
-    //set useState() hook, the [] part is using destructuring
-    const [movies, setMovies] = useState([]);//we pass in empty array as the states default value
-    const [searchTerm, setSearchTerm] = useState('');
-    const [main, setMain] = useState([]);
-    // const [dark, setDark] = useState(false);
-    const [searchImg,setSearchImg] = useState(SearchIcon);
+    useEffect(()=>{
+        auth().then((data) => {
+            if (data) {
+                setLoggedinUser(data);
+            }
+            
+        });
+        //auth();         //console.log("auth() was called");
+    },[]);
 
-    // var searchImg = SearchIcon;
+    useEffect(()=>{
+        console.log(loggedinUser);
+    },[loggedinUser]);
 
-    // const changeSearchImage1 = () => {
-    //     setSearchImg = SearchIcon;
-    // }
+    const auth = async () => { 
+        console.log("start of auth");
+        try {
 
-    // const changeSearchImage2 = () => {
-    //     setSearchImg = SearchIcon2;
-    // }
+            const response = await fetch("http://localhost:3001/"
+                , {
+        
+                  method: "GET",
+                  credentials: 'include',
+                //   headers: {
+                //     'Content-Type': 'application/json',      
+                //   },
+                //   body: JSON.stringify(input),
+        
+                }
+                );
+                
+                const data = await response.json();
+                //setLoggedinUser(data, ()=>{console.log("Hello!")});
+        
+                return data;
 
-    // below is how you implement an api call without any http protocol routing (get/post/put/delete), 
-    // you will need express.js for http routing/REST, and usually done from a dedicated backend
-    const searchMovies = async (title) => { 
-        const response = await fetch(`${API_URL}&s=${title}`);
-        const data = await response.json();
+        } catch (error) {
+            //setError(error.message);
+            console.log(error);
+        }
+        
 
-        console.log(data);
+        
+
+        //console.log(data);
+        // if (loggedinUser == {}) {
+        //     setLoggedinUser(data);
+        // }
+        //setLoggedinUser(data);
+        // console.log(data);
+        // console.log(loggedinUser);
+        
+        
         //console.log(data.Plot);
 
         //never do this:
         //movies = data.search;
 
         //instead, state can only be modified using the setState function:
-        setMovies(data.Search);
+        //setMovies(data.Search);
     }
 
-    // useEffect(()=>{
-    //     searchMovies('Batman');
-    // },[]);
+    const [formData, setFormData] = useState({ username: 'Zack', password: 'Zack123' });
+    const handleChange = (event) => {
+        //notice the 2 different forms of deconstructuring used below*
+        const { name, value } = event.target;
+        setFormData({ ...formData, [name]: value });
+    };
 
-    // useEffect(()=>{
-    //     searchImg = SearchIcon2;
-    // },[]);
+    
+    //const [name, setName] = React.useState('');
+    const handleSubmit = (event) => {
+        console.log("Start of handleSubmit:");
+        event.preventDefault();
+        alert('Submitted Name: ' + formData.username + ', Submitted Password: ' + formData.password);
+        login (formData);
+    }
 
-    const getMovieData = async (movieId) => { 
-        const response = await fetch(`${API_URL}&i=${movieId}&plot=full`);
+    const handleLogout = (event) => {
+        console.log("Logging out...");
+        event.preventDefault();
+        alert('Logging out user : ' + loggedinUser["username"]);
+        logout().then((data) => {setLoggedinUser(data)});
+    }
+
+    const login = async (input) => { 
+        console.log("start of handleLogin");
+
+        const response = await fetch("http://localhost:3001/login", {
+
+          method: "POST",
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',      
+          },
+          body: JSON.stringify(input),
+
+        });
         const data = await response.json();
 
+        console.log("login request result:");
         console.log(data);
-        console.log(data.Plot);
+        setLoggedinUser(data);
+        //console.log(data.Plot);
 
-        setMain(data);
+        //never do this:
+        //movies = data.search;
 
-        if (window.innerWidth < 600){
-            document.getElementById("moviePage").scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
-        }else{
-            document.getElementById("moviePage").scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
-        }
-        
-        //console.log("window.innerWidth = " + window.innerWidth);
+        //instead, state can only be modified using the setState function:
+        //setMovies(data.Search);
     }
 
-    // useEffect(()=>{
-    //     getMovieData('tt2975590');
-    // },[]);
+    const logout = async () => {
+        console.log("start of auth");
+
+        const response = await fetch("http://localhost:3001/login/logout"
+        , {
+
+          method: "GET",
+          credentials: 'include',
+
+        }
+        );
+        
+        const data = await response.json();
+
+        return data;
+    }
 
     return (
-        //<h1>App</h1> //this is jsx (javascript xml, its a combination of JS and markup language)
-        //changeImg1={()=>{setSearchImg(SearchIcon)}} changeImg2={()=>{setSearchImg(SearchIcon2)}}
         <div className="app">
-            <DarkMode changeImg1={()=>{setSearchImg(SearchIcon)}} changeImg2={()=>{setSearchImg(SearchIcon2)}}/>
-            <Navbar />
-            <h1>CoolMoviezDB</h1>
 
-            <div className="search">
-                <input 
-                    placeholder="Search for movies"
-                    value={searchTerm}
-                    onChange={(e)=>{setSearchTerm(e.target.value)}}
-                />
-                {/* {
-                    localStorage.getItem("selectedTheme") === "dark" ? (
-                        <img
-                            src={SearchIcon2}
-                            alt="search"
-                            onClick={()=>{searchMovies(searchTerm)}}
-                        />
-                    ) : (
-                        <img
-                            src={SearchIcon}
-                            alt="search"
-                            onClick={()=>{searchMovies(searchTerm)}}
-                         />
+            <DarkMode />
+            <Navbar username = {loggedinUser["username"] || "none"}/>
+            <Routes>
+                <Route path='/' element={<Home />}></Route>
+                <Route path='/comics' element={<Comics />}></Route>
+                <Route path='/login' element={<Login />}></Route>
+            </Routes>
+            <h1>Content...</h1>
+            
+            <div className="content">
+
+                <div className="register" style={{marginBottom:"20px"}}>
+                    <h2>Register</h2>
+            
+                    <form action="" method="POST">
+                        <label for="username">Username:</label><br/>
+                        <input type="text" id="username" name="username" defaultValue="John"/><br/>
+                        <label for="email">E-mail:</label><br/>
+                        <input type="email" id="email" name="email" defaultValue="John@yahoo.com"/><br/>
+                        <label for="password">Password:</label><br/>
+                        <input type="password" id="password" name="password" defaultValue="John123"/><br/>
+                        <br/>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                    <p>User created: {createdUser || "none"}  </p> 
+                </div>
+
+                <div className="login">
+                    <h2>Login</h2>
+                    <form onSubmit={handleSubmit}>
+                        <label for="username">Username:</label><br/>
+                        <input type="text" id="loginusername" name="username" value={formData.username} onChange={handleChange}/><br/>
+                        <label for="password">Password:</label><br/>
+                        <input type="password" id="loginpassword" name="password" value={formData.password} onChange={handleChange}/><br/>
+                        <br/>
+                        <input type="submit" value="Submit"/>
+                    </form>
+                    <p>User logged-in: {loggedinUser["username"] || "none"}  </p>
+                </div>
+                { loggedinUser["username"] ? 
+                    <form onSubmit={handleLogout} method="GET">
+                        <button type="submit">Logout</button>
+                    </form> 
+                    : null
+                }   
+
+                <div className="upload">
+                    <form action="/editcomics" method="POST" enctype="multipart/form-data">
+                        <label for="title">Title:</label><br/>
+                        <input type="text" id="title" name="title" value="One Piece" required/><br/>
+
+                        <p>Upload thumbnail image for comic here:</p>
+                        <input type="file" accept="image/*" id="comicImg" name="comicImg" required/><br/>
+                        <output id="preview"></output><br/>
+
+                        <label for="synopsis">Synopsis:</label><br/>
+                        <textarea id="synopsis" name="synopsis" rows="4" cols="50" required>blablabla</textarea><br/>
+                        
+                        <input type="submit" value="Submit"/>
+                    </form>
+                </div>
+
+                
+
+                {/* { loggedinUser["username"] ? 
+               
+                loggedinUser["comics"].map((comics)=>{
+                    return (
+                        <p>{comics["title"]}</p>
                     )
+                
+                })
+                    
+                    
+                    : null
                 } */}
-                <img
-                    src={searchImg}
-                    alt="search"
-                    onClick={()=>{searchMovies(searchTerm)}}
-                />
+
+                { loggedinUser["username"] ? 
+                    
+                    <ul>
+                        {loggedinUser["comics"].map((comics)=>{
+                            return (
+                            <li>
+                                <p>{comics["title"]}</p>
+                                <p>comic id: {comics["_id"]}</p>
+                                <img src={comics["mainImg"]} width="200px" alt="comic main image"/>
+                                <a href="/"><button >EDIT</button></a>
+                                <form style={{display: "inline"}} >
+                                    <input type="submit" value="DELETE" />
+                                    
+                                </form>
+                            </li> )
+                        })}
+                     </ul>
+                    
+                    : null
+                }
+
+                    <ul>
+                        {numbers.map((number) =>
+                        <il>
+                            <div>{number.value1}</div>
+                            <div>{number.value2}</div>
+                            <div>{number.value3}</div>
+                        </il>
+                        )}
+                    </ul>
+
+                    <h3>Comics by : {loggedinUser["username"]}</h3>
+
+                    {loggedinUser["username"] ? 
+
+                        <ul>
+                            {loggedinUser["comics"].map((comics)=>{
+                                return (
+                                    <li>
+                                    <p>{comics.title}</p>
+                                    <img src={comics.mainImg} width="200px" alt="comic main image"/><br/>
+                                    <p>Synopsis: {comics.synopsis}</p>
+                                    <p>Likes: {comics.likes}</p>
+                                    <a href="/"><button>Go to comic</button></a>
+                                </li>)
+                            })}
+                        </ul>
+
+                        : null
+                    
+                    }
+                    
                 
-                
-                
+                    
+
             </div>
 
-            {
-                main.length !== 0 ? (
-
-                    <div className="container">
-                        <div id="moviePage" className="movie-flex-column">
-                            <div className="movie-flex-row">
-                                <div className="movie-img">
-                                    <img src={main.Poster}/>
-                                </div>
-                                <div className="movie-info">
-                                    <p><span style={{fontWeight:"1000"}}>Title:</span> {main.Title}</p>
-                                    <p><span style={{fontWeight:"1000"}}>Genre:</span> {main.Genre}</p>
-                                    <p><span style={{fontWeight:"1000"}}>Year:</span> {main.Year}</p>
-                                    <p><span style={{fontWeight:"1000"}}>Director:</span> {main.Director}</p>
-                                    <p><span style={{fontWeight:"1000"}}>Actors:</span> {main.Actors}</p>
-                                    <p><span style={{fontWeight:"1000"}}>IMDB rating:</span> {main.imdbRating}</p>
-                                    <p><span style={{fontWeight:"1000"}}>IMDB votes:</span> {main.imdbVotes}</p>
-                                </div>
-                            </div>                    
-                            <div className="movie-plot">
-                                <div className="movie-plot-text">
-                                    <h3>Plot:</h3>
-                                    <p>{main.Plot}</p>
-                                </div>                            
-                            </div>                                        
-                        </div>  
-                    </div>
-                
-                ) : (
-
-                    <div className="empty">
-                        <h2>Search and click on a movie to see movie details</h2>
-                    </div>
-
-                )
-
-
-                
-            }
-
-            
-            
-            
-
-            {
-                movies?.length > 0 //Note that the ? here is called optional chaining, it checks if variable is null, and returns 'undefined' instead of throwing an error
-                    ? ( //this is just a typical ternary operator
-                        <div className="container">
-                            {movies.map((movie)=>{
-                                return <MovieCard movie={movie} key={movie.imdbID} handleClick={()=>{getMovieData(movie.imdbID)}}/> //*this can be written without 'return' by simply not using curly braces. Look up how arrow functions work without curly braces. See below code block.
-                            })}
-                            {/* {movies.map((movie)=>
-                                <MovieCard movie={movie}/> //*this can be written without 'return' by simply not using curly braces. Look up how arrow functions work without curly braces.
-                            )} */}
-                        </div>
-                    ) : (
-                        <div className="empty">
-                            <h2>No movies found</h2>
-                        </div>
-                    )
-            }
-
-            {/* <div className="container">
-                <MovieCard movie1={movie1} />
-            </div> */}
-
         </div>
-    );
+            
+    )
+    
 }
 
-export default App;// export this script so that it can be called from other scripts
+export default App;
