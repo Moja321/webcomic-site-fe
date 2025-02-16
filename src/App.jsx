@@ -10,10 +10,16 @@ import Navbar from './Components/Navbar/Navbar';
 import Comics from './Components/Pages/Comics';
 import Login from './Components/Pages/Login';
 import Home from './Components/Pages/Home';
+import About from './Components/Pages/About';
+import Upload from './Components/Pages/Upload';
+import Comic from './Components/Pages/Comic';
+import Chapter from './Components/Pages/Chapter';
+
+export const Context = React.createContext();
 
 const App = () => {
     const numbers = [{value1: 1, value2: 2, value3: 3},{value1: 4, value2: 5, value3: 6},{value1: 7, value2: 8, value3: 9}];
-    var createdUser;
+    //var createdUser;
     //var loggedinUser;
     const [loggedinUser, setLoggedinUser] = useState({user : "none"});
 
@@ -79,72 +85,72 @@ const App = () => {
         //setMovies(data.Search);
     }
 
-    const [formData, setFormData] = useState({ username: 'Zack', password: 'Zack123' });
-    const handleChange = (event) => {
-        //notice the 2 different forms of deconstructuring used below*
-        const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value });
-    };
+    // const [formData, setFormData] = useState({ username: 'Zack', password: 'Zack123' });
+    // const handleChange = (event) => {
+    //     //notice the 2 different forms of deconstructuring used below*
+    //     const { name, value } = event.target;
+    //     setFormData({ ...formData, [name]: value });
+    // };
 
     
-    //const [name, setName] = React.useState('');
-    const handleSubmit = (event) => {
-        console.log("Start of handleSubmit:");
-        event.preventDefault();
-        alert('Submitted Name: ' + formData.username + ', Submitted Password: ' + formData.password);
-        login (formData);
-    }
+    // //const [name, setName] = React.useState('');
+    // const handleSubmit = (event) => {
+    //     console.log("Start of handleSubmit:");
+    //     event.preventDefault();
+    //     alert('Submitted Name: ' + formData.username + ', Submitted Password: ' + formData.password);
+    //     login (formData);
+    // }
 
-    const handleLogout = (event) => {
-        console.log("Logging out...");
-        event.preventDefault();
-        alert('Logging out user : ' + loggedinUser["username"]);
-        logout().then((data) => {setLoggedinUser(data)});
-    }
+    // const handleLogout = (event) => {
+    //     console.log("Logging out...");
+    //     event.preventDefault();
+    //     alert('Logging out user : ' + loggedinUser["username"]);
+    //     logout().then((data) => {setLoggedinUser(data)});
+    // }
 
-    const login = async (input) => { 
-        console.log("start of handleLogin");
+    // const login = async (input) => { 
+    //     console.log("start of handleLogin");
 
-        const response = await fetch("http://localhost:3001/login", {
+    //     const response = await fetch("http://localhost:3001/login", {
 
-          method: "POST",
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',      
-          },
-          body: JSON.stringify(input),
+    //       method: "POST",
+    //       credentials: 'include',
+    //       headers: {
+    //         'Content-Type': 'application/json',      
+    //       },
+    //       body: JSON.stringify(input),
 
-        });
-        const data = await response.json();
+    //     });
+    //     const data = await response.json();
 
-        console.log("login request result:");
-        console.log(data);
-        setLoggedinUser(data);
-        //console.log(data.Plot);
+    //     console.log("login request result:");
+    //     console.log(data);
+    //     setLoggedinUser(data);
+    //     //console.log(data.Plot);
 
-        //never do this:
-        //movies = data.search;
+    //     //never do this:
+    //     //movies = data.search;
 
-        //instead, state can only be modified using the setState function:
-        //setMovies(data.Search);
-    }
+    //     //instead, state can only be modified using the setState function:
+    //     //setMovies(data.Search);
+    // }
 
-    const logout = async () => {
-        console.log("start of auth");
+    // const logout = async () => {
+    //     console.log("start of auth");
 
-        const response = await fetch("http://localhost:3001/login/logout"
-        , {
+    //     const response = await fetch("http://localhost:3001/login/logout"
+    //     , {
 
-          method: "GET",
-          credentials: 'include',
+    //       method: "GET",
+    //       credentials: 'include',
 
-        }
-        );
+    //     }
+    //     );
         
-        const data = await response.json();
+    //     const data = await response.json();
 
-        return data;
-    }
+    //     return data;
+    // }
 
     return (
         <div className="app">
@@ -153,12 +159,31 @@ const App = () => {
             <Navbar username = {loggedinUser["username"] || "none"}/>
             <Routes>
                 <Route path='/' element={<Home />}></Route>
+                <Route path='/about' element={<About />}></Route>
+                <Route path='/upload' element={
+
+                    <Context.Provider value={[loggedinUser, setLoggedinUser]}>
+                        <Upload />
+                    </Context.Provider>
+                                        
+                }></Route>
                 <Route path='/comics' element={<Comics />}></Route>
                 <Route path='/login' element={<Login />}></Route>
+                <Route path='/comics/:id/comic' element={<Comic />}></Route>
+                <Route path='/comics/:id/:chapterid' element={<Chapter />}></Route>
             </Routes>
-            <h1>Content...</h1>
+            <p>Content...</p>
+            <ul>
+                {numbers.map((number) =>
+                <il>
+                    <div>{number.value1}</div>
+                    <div>{number.value2}</div>
+                    <div>{number.value3}</div>
+                </il>
+                )}
+            </ul>
             
-            <div className="content">
+            {/* <div className="content">
 
                 <div className="register" style={{marginBottom:"20px"}}>
                     <h2>Register</h2>
@@ -213,7 +238,7 @@ const App = () => {
 
                 
 
-                {/* { loggedinUser["username"] ? 
+                { loggedinUser["username"] ? 
                
                 loggedinUser["comics"].map((comics)=>{
                     return (
@@ -224,7 +249,7 @@ const App = () => {
                     
                     
                     : null
-                } */}
+                }
 
                 { loggedinUser["username"] ? 
                     
@@ -247,15 +272,7 @@ const App = () => {
                     : null
                 }
 
-                    <ul>
-                        {numbers.map((number) =>
-                        <il>
-                            <div>{number.value1}</div>
-                            <div>{number.value2}</div>
-                            <div>{number.value3}</div>
-                        </il>
-                        )}
-                    </ul>
+                    
 
                     <h3>Comics by : {loggedinUser["username"]}</h3>
 
@@ -281,7 +298,7 @@ const App = () => {
                 
                     
 
-            </div>
+            </div> */}
 
         </div>
             

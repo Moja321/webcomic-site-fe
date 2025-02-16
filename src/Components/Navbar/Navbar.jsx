@@ -12,8 +12,8 @@ const Navbar = ({username}) => {
         <nav className="navbar">
           <ul>
             <CustomLink to="/" className="Home">Home</CustomLink>
-            <CustomLink to="/" className="About">About</CustomLink>
-            <CustomLink to="/" className="Upload">Upload</CustomLink>
+            <CustomLink to="/about" className="About">About</CustomLink>
+            <CustomLink to="/upload" className="Upload">Upload</CustomLink>
             <CustomLink to="/comics" className="Comics">Comics</CustomLink>
             <CustomLink to="/login" className="Sign-in">Sign-in</CustomLink>
           </ul>
