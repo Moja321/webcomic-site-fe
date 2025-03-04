@@ -65,7 +65,10 @@ const Chapter = () => {
         const formData = new FormData(form);
   
         console.log("id is :" + id);
+
+        //note that navigate does not refresh the page if already at the same url
         navigate("/comics/" + id + "/" + formData.get("chapterid"));
+        
     }
 
   return (
@@ -96,16 +99,20 @@ const Chapter = () => {
       </form>
       <div className="pages-container">
 
-        <ul>
+        <ul className=''>
         {
           chapterImgs["chapterImgs"] ? 
           chapterImgs["chapterImgs"][0]["comics"]["chapters"].map((chapters)=>(
             chapters._id == chapterid ? 
             
-            chapters["pageImg"].map((page)=>(
+            chapters["pageImg"].map((page,index)=>(
 
-              <p>{page}</p>
-
+              //<p>{page}</p>
+              <div>
+                <img src={page} className="comic-page" alt={"chapter page number" + (index + 1)}/>
+                <br />
+              </div>
+              
             ))
 
             : null

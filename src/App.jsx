@@ -168,7 +168,13 @@ const App = () => {
                                         
                 }></Route>
                 <Route path='/comics' element={<Comics />}></Route>
-                <Route path='/login' element={<Login />}></Route>
+                <Route path='/login' element={
+
+                    <Context.Provider value={[loggedinUser, setLoggedinUser]}>
+                        <Login />
+                    </Context.Provider>
+
+                }></Route>
                 <Route path='/comics/:id/comic' element={<Comic />}></Route>
                 <Route path='/comics/:id/:chapterid' element={<Chapter />}></Route>
             </Routes>

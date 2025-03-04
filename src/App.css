@@ -356,3 +356,41 @@ h1 {
   }
 
 }
+
+/* .pages-container{
+  display: flex;
+  flex-direction: column;
+} */
+
+ul.no-bullets {
+  list-style-type: none;
+  /* justify-content: center; */
+  /* align-items: center; */
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.comic-page{
+  width: 650px;
+  margin-right: 2px;
+  margin-left: 2px;
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+    background-color: aquamarine;
+  }
+  .comic-page{
+      width:400px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  body {
+    background-color: lightgreen;
+  }
+  .comic-page{
+      width:250px;
+  }
+}
