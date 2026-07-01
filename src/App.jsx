@@ -14,6 +14,7 @@ import About from './Components/Pages/About';
 import Upload from './Components/Pages/Upload';
 import Comic from './Components/Pages/Comic';
 import Chapter from './Components/Pages/Chapter';
+import EditComic from './Components/Pages/EditComic';
 
 export const Context = React.createContext();
 
@@ -177,6 +178,7 @@ const App = () => {
                 }></Route>
                 <Route path='/comics/:id/comic' element={<Comic />}></Route>
                 <Route path='/comics/:id/:chapterid' element={<Chapter />}></Route>
+                <Route path='/editcomic/:id/' element={<EditComic />}></Route>
             </Routes>
             <p>Content...</p>
             <ul>

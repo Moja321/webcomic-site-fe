@@ -10,6 +10,9 @@ const Chapter = () => {
 
     const [chapterImgs , setChapterImgs] = useState({});
 
+    //TODO 14/11/25 - Find a way to store/initialise comic creator id
+    //So actually the comic creator name and id is included in chapterImgs requested payload
+
     //TODO1: getChapterImgs(): api function for getting spesific chapter image addresses
 
     //TODO2: call the above at beggining of this components render, assign acquired payload to chapterImgs
@@ -108,8 +111,15 @@ const Chapter = () => {
             chapters["pageImg"].map((page,index)=>(
 
               //<p>{page}</p>
+
               <div>
-                <img src={page} className="comic-page" alt={"chapter page number" + (index + 1)}/>
+                { (chapterImgs["chapterImgs"][0]["username"] == "Zack" || chapterImgs["chapterImgs"][0]["username"] == "Bob") ? 
+                  <img src={page} className="comic-page" alt={"chapter page number" + (index + 1)}/>
+                  :
+                  <img src={process.env.REACT_APP_BACK_END + page} className="comic-page" alt={"chapter page number" + (index + 1)}/>
+                }
+                {/* <img src={page} className="comic-page" alt={"chapter page number" + (index + 1)}/>
+                <img src={process.env.REACT_APP_BACK_END + page} className="comic-page" alt={"chapter page number" + (index + 1)}/> */}
                 <br />
               </div>
               

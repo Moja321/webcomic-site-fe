@@ -98,15 +98,21 @@ const Comics = () => {
                  allComics["allComics"].map((user)=>(
                     <div>
                       <h2>{user["_id"]}</h2>
-                    
+                      
                       {user.comics.map((comic) => (
                       
                           <li>
-                             <p>{comic.title}</p>
-                             <img src={comic.mainImg} width="200px" alt="comic main image"/><br/>
-                             <p>Synopsis : {comic.synopsis}</p>
-                             <p>Likes : {comic.likes}</p>
-                             <Link to={comic["_id"] + "/comic"}><button>Go to comic</button></Link>
+                            <p>{comic.title}</p>
+                            
+                              { (user["username"] == "Zack" || user["username"] == "Bob") ? 
+                                <img src={comic.mainImg} width="200px" alt="comic main image"/>
+                                :
+                                <img src={process.env.REACT_APP_BACK_END + comic.mainImg} width="200px" alt="comic main image"/>
+                              }
+                            <br/>
+                            <p>Synopsis : {comic.synopsis}</p>
+                            <p>Likes : {comic.likes}</p>
+                            <Link to={comic["_id"] + "/comic"}><button>Go to comic</button></Link>
                          </li>
                       
                       ))}
