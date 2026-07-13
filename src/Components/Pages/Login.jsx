@@ -17,6 +17,9 @@ const Login = () => {
 
   //react state for image previewer
   const [previewSrc, setPreviewSrc] = useState('');
+  //for multiple previews
+  const [previews, setPreviews] = useState([]);
+
 
   useEffect(()=>{
           console.log("comicToEdit:");
@@ -34,6 +37,13 @@ const Login = () => {
       }
     };
   }, [previewSrc]);
+  
+  //Clean up ALL object URLs to prevent memory leaks for multiple previews
+  useEffect(() => {
+    return () => {
+      previews.forEach(p => URL.revokeObjectURL(p.src));
+    };
+  }, [previews]);
 
   //function for image previewer
   const handleFileSelect = (evt) => {
@@ -44,6 +54,39 @@ const Login = () => {
       const newUrl = URL.createObjectURL(file);
       setPreviewSrc(newUrl);
     }
+  };
+
+  //multiple previews version
+  const handleFileSelectMultiple = (evt) => {
+    const files = Array.from(evt.target.files); // Convert FileList to standard Array
+
+    // Filter out non-images and map them into preview objects
+    const newPreviews = files
+      .filter(file => file.type.startsWith('image/'))
+      .map(file => ({
+        id: crypto.randomUUID(), // Unique key for React mapping
+        src: URL.createObjectURL(file),
+        name: file.name,
+        file : file // <-- CRITICAL: Keep a reference to the actual raw file object
+      }));
+
+    //setPreviews(newPreviews);
+    
+    // Append the new previews to the existing ones using the spread operator
+    setPreviews(prevPreviews => [...prevPreviews, ...newPreviews]);
+  };
+
+  const handleRemovePreview = (idToRemove) => {
+    setPreviews((prevPreviews) => {
+      // Optional but recommended: Revoke the object URL to free up memory
+      const imageToDelete = prevPreviews.find(p => p.id === idToRemove);
+      if (imageToDelete && imageToDelete.src) {
+        URL.revokeObjectURL(imageToDelete.src);
+      }
+      
+      // Filter out the image with the matching ID
+      return prevPreviews.filter((preview) => preview.id !== idToRemove);
+    });
   };
 
   const [formValues, setFormValues] = useState({ title: 'One Piece'});
@@ -233,9 +276,23 @@ const Login = () => {
     //   formData.append('files', file);
     // }
 
-    for (let i=0;i<event.target.chapterImg.files.length;i++){
-      formData.append('chapterImg', event.target.chapterImg.files[i]);
+    // Optional: Frontend validation since the native 'required' attribute on the input 
+    // won't accurately track the accumulated files anymore.
+    if (previews.length === 0) {
+      alert("Please select at least one image page to upload.");
+      return;
     }
+
+    // CHANGED HERE: Instead of reading from the native file input,
+    // loop through your accumulated React state and pull out the 'file' property
+    previews.forEach((preview) => {
+      formData.append('chapterImg', preview.file);
+    });
+
+    //previous loop using native event.target method, instead of reading from a React state variable.
+    // for (let i=0;i<event.target.chapterImg.files.length;i++){
+    //   formData.append('chapterImg', event.target.chapterImg.files[i]);
+    // }
 
     alert('Submitted uploading image pages to chapter with ID : ' + event.target.chapters.value);
     console.log("formData for uploadChapters: ");
@@ -440,11 +497,62 @@ const Login = () => {
               </select>
               <br/>
               <br/>
-              <label htmlFor="chapterImg">Upload pages (max 10):</label>
+              <label htmlFor="chapterImg"
+              
+                style={{
+                  display: 'inline-block',
+                  padding: '8px 12px',
+                  backgroundColor: '#007bff',
+                  color: 'white',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold'
+                }}
+                            
+              >Choose pages (max 10)</label>
               <br/>
               <br/>
-              <input type="file" accept="image/*" id="chapterImg" name="chapterImg" multiple/><br/>
-              <output id="list"></output>
+              <input 
+                type="file" 
+                accept="image/*" 
+                id="chapterImg" 
+                name="chapterImg" 
+                multiple
+                onChange={handleFileSelectMultiple}
+                style={{ display: 'none' }} // <-- This hides the input and its default text completely
+              />
+              <output id="previews">
+
+                {previews.map((preview) => (
+                  <span 
+                    key={preview.id} 
+                    style={{ display: 'inline-block', position: 'relative', textAlign: 'center', margin: '5px' }}
+                  >
+                    <img 
+                      style={{ width: '150px', border: '1px solid #000', display: 'block' }} 
+                      src={preview.src} 
+                      alt={preview.name}
+                      title={preview.name} 
+                    />
+                    <button
+                      type="button" // CRITICAL: Setting type="button" prevents it from accidentally submitting the form
+                      onClick={() => handleRemovePreview(preview.id)}
+                      style={{
+                        marginTop: '5px',
+                        backgroundColor: '#ff4d4d',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '3px',
+                        padding: '2px 8px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Remove
+                    </button>
+                  </span>
+                ))}
+
+              </output>
               <br/>
               <input type="submit" value="Upload chapter pages"/>
               <p>locals.errorMsg || "Please upload images for the comic chapter selected"</p>
