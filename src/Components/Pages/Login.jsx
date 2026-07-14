@@ -17,6 +17,8 @@ const Login = () => {
 
   //react state for image previewer
   const [previewSrc, setPreviewSrc] = useState('');
+  const [previewThumbnailSrc, setPreviewThumbnailSrc] = useState('');
+
   //for multiple previews
   const [previews, setPreviews] = useState([]);
 
@@ -37,7 +39,15 @@ const Login = () => {
       }
     };
   }, [previewSrc]);
-  
+
+  useEffect(() => {
+    return () => {
+      if (previewThumbnailSrc) {
+        URL.revokeObjectURL(previewThumbnailSrc);
+      }
+    };
+  }, [previewThumbnailSrc]);
+
   //Clean up ALL object URLs to prevent memory leaks for multiple previews
   useEffect(() => {
     return () => {
@@ -46,13 +56,14 @@ const Login = () => {
   }, [previews]);
 
   //function for image previewer
-  const handleFileSelect = (evt) => {
+  const handleFileSelect = (evt, setPreviewState) => {
     const file = evt.target.files[0]; // Get the single selected file
 
     if (file && file.type.startsWith('image/')) {
       // Create a temporary local URL for the new image
       const newUrl = URL.createObjectURL(file);
-      setPreviewSrc(newUrl);
+      //setPreviewSrc(newUrl);
+      setPreviewState(newUrl);
     }
   };
 
@@ -369,9 +380,22 @@ const Login = () => {
         <label htmlFor="title">Title:</label><br/>
         <input type="text" id="title" name="title" onChange={handleChange} defaultValue={formValues.title} required/><br/>
 
-        <p>Upload thumbnail image for comic here:</p>
-        <input type="file" accept="image/jpeg" id="comicImg" name="comicImg" required/><br/>
-        <output id="preview"></output><br/>
+        <p>Upload comic thumbnail image here:</p>
+        <input type="file" accept="image/jpeg" id="comicImg" name="comicImg" onChange={(e) => {handleFileSelect(e,setPreviewThumbnailSrc)}} required/><br/>
+        <output id="preview">
+          
+          {previewThumbnailSrc && (
+            <span>
+              <img 
+                style={{ width: '200px', border: '1px solid #000', margin: '5px' }} 
+                src={previewThumbnailSrc} 
+                alt="New thumbnail preview" 
+              />
+            </span>
+          )}
+          
+        </output><br/> 
+        {/* TODO:Add image previewer code here */}
 
         <label htmlFor="synopsis">Synopsis:</label><br/>
         <textarea id="synopsis" name="synopsis" rows="4" cols="50" required>blablabla</textarea><br/>
@@ -433,13 +457,13 @@ const Login = () => {
                 required              
               /><br/>
 
-              <p>Upload thumbnail image for comic here:</p>
+              <p>Change or update comic thumbnail image here:</p>
               <input 
                 type="file" 
                 accept="image/*" 
                 id="comicImg" 
                 name="comicImg" 
-                onChange={handleFileSelect} 
+                onChange={(e) => {handleFileSelect(e,setPreviewSrc)}} 
                 required
               /><br/>
               <output id="preview">
