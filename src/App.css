@@ -298,6 +298,20 @@ h1 {
   opacity: 1;
 }
 
+/*for keeping buttons consistent whether or not they are inside a form and reset browser css overrides */
+button {
+  /* 1. Force the button to use the exact same font as the rest of your page */
+  font-family: inherit;
+  font-size: inherit;
+  
+  /* 2. Normalize the box model so padding doesn't do weird things */
+  box-sizing: border-box;
+  
+  /* 3. Strip away browser-specific native OS styling overrides */
+  appearance: none;
+  -webkit-appearance: none;
+}
+
 @media screen and (max-width: 900px) {
   .movie-info p {
     font-size: 2vw;

@@ -112,7 +112,18 @@ const Comics = () => {
                             <br/>
                             <p>Synopsis : {comic.synopsis}</p>
                             <p>Likes : {comic.likes}</p>
-                            <Link to={comic["_id"] + "/comic"}><button>Go to comic</button></Link>
+                            <Link to={comic["_id"] + "/comic"}
+                            
+                              style={{
+                              display: 'inline-block',
+                              padding: '10px 20px',
+                              backgroundColor: '#0070f3',
+                              color: 'white',
+                              borderRadius: '5px',
+                              textDecoration: 'none'
+                            }}
+                            
+                            >Go to comic</Link>
                          </li>
                       
                       ))}

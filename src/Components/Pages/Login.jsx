@@ -140,6 +140,11 @@ const Login = () => {
 
     });
   }
+
+  const handleUpdateComic = (event) => {
+    //code for handling update comic here
+    //utilise updateComic (api request)
+  }
   
   const handleCreateChapter = (event) => {
     //initalise input data for createChapter and run createChapter(input)
@@ -239,6 +244,10 @@ const Login = () => {
     console.log("Target is :");
     console.log(target);
      setComicToEdit({comic : target});
+  }
+
+  const updateComic = async (input) => {
+    //await fetch backend route here
   }
 
   const createChapter = async (input, comicId) => {
@@ -363,10 +372,6 @@ const Login = () => {
 
   }
 
-  const updateComic = () => {
-    //TODO after completing uploadPages()
-  }
-
 
   return (
     <div className="">
@@ -400,7 +405,8 @@ const Login = () => {
         <label htmlFor="synopsis">Synopsis:</label><br/>
         <textarea id="synopsis" name="synopsis" rows="4" cols="50" required>blablabla</textarea><br/>
         
-        <input type="submit" defaultValue="Submit"/>
+        {/* <input type="submit" defaultValue="Submit"/> */}
+        <button type="submit">Create comic</button>
       </form>
       <br/>
 
@@ -422,15 +428,23 @@ const Login = () => {
                 
                 <br/>
                 <br/>
-                {/* <Link to={"/editcomic/" + comic._id}><button>EDIT</button></Link> */}
-                <button onClick={() => editComic(comic._id)}>EDIT COMIC</button>
-                <form
-                  style={{display: "inline"}}
-                  action=""
-                  method="POST"
-                >
-                  <input type="submit" defaultValue="DELETE" />
-                </form>
+
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  {/* <Link to={"/editcomic/" + comic._id}><button>EDIT</button></Link> */}
+                  <button onClick={() => editComic(comic._id)}>EDIT</button>
+                  
+                  <form
+                    style={{display: "inline"}}
+                    action=""
+                    method="POST"
+                  >
+                    {/* <input type="submit" defaultValue="DELETE" /> */}
+                    <button type="submit">DELETE</button>                  
+                  </form>
+                    
+                </div>
+
+                
 
 
               </li>
@@ -446,7 +460,8 @@ const Login = () => {
             <h1>Hello!{comicToEdit.comic._id}</h1>
 
             <h2>Edit existing comic - {comicToEdit.comic.title}: </h2>
-            <form action="/editcomics/comicid" method="POST" encType="multipart/form-data">
+            {/* <form action="/editcomics/comicid" method="POST" encType="multipart/form-data"> */}
+            <form onSubmit={handleUpdateComic}>
               <label htmlFor="title">Title:</label><br/>
 
               <input 
@@ -486,7 +501,7 @@ const Login = () => {
               <label htmlFor="synopsis">Synopsis:</label><br/>
               <textarea id="synopsis" name="synopsis" rows="4" cols="50" defaultValue={editComic?.synopsis} required></textarea><br/>
               
-              <input type="submit" defaultValue="Submit edit"/>
+              <button type="submit">Submit changes</button>
             </form>
             
             <br/>
@@ -497,7 +512,8 @@ const Login = () => {
               <br/>
               <input type="text" id="chapterTitle" name="chapterTitle" defaultValue="Chapter 1" required/><br/>
               <br/>
-              <input type="submit" defaultValue="Add new chapter"/>
+              {/* <input type="submit" defaultValue="Add new chapter"/> */}
+              <button type="submit">Add new chapter</button>
             </form>
 
             <br/>
@@ -578,7 +594,8 @@ const Login = () => {
 
               </output>
               <br/>
-              <input type="submit" value="Upload chapter pages"/>
+              {/* <input type="submit" value="Upload chapter pages"/> */}
+              <button type="submit">Upload chapter pages</button>
               <p>locals.errorMsg || "Please upload images for the comic chapter selected"</p>
             </form>
 

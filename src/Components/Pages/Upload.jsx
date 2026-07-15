@@ -119,7 +119,8 @@ const Upload = () => {
                 <label for="reg-email">Email:</label><br/>
                 <input type="email" id="reg-email" name="email" value={regData.email} onChange={handleRegChange} required/><br/>
                 <br/>
-                <input type="submit" value="Submit"/>
+                {/* <input type="submit" value="Submit"/> */}
+                <button type="submit">Register</button>
             </form>
             <p>User created: {createdUser || "none"}  </p> 
         </div>
@@ -132,7 +133,8 @@ const Upload = () => {
                 <label for="login-password">Password:</label><br/>
                 <input type="password" id="login-password" name="password" value={formData.password} onChange={handleChange} required/><br/>
                 <br/>
-                <input type="submit" value="Submit"/>
+                {/* <input type="submit" value="Submit"/> */}
+                <button type="submit">Login</button>
             </form>
             <p>User logged-in: {loggedinUser["username"] || "none"}  </p>
         </div>

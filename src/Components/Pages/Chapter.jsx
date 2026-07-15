@@ -85,20 +85,21 @@ const Chapter = () => {
 
 
       <form onSubmit={goToChapter}>
-      <label for="chapterid">Choose a comic chapter:</label>
-      <select name="chapterid" id="chapterid" required>
-      {
-          chapterImgs["chapterImgs"] ? 
-          chapterImgs["chapterImgs"][0]["comics"]["chapters"].map((chapters)=>(
-            <option value={chapters._id}>{chapters.chapterTitle}</option>
-          )) 
-          : null
+        <label for="chapterid">Choose a comic chapter:</label>
+        <select name="chapterid" id="chapterid" required>
+        {
+            chapterImgs["chapterImgs"] ? 
+            chapterImgs["chapterImgs"][0]["comics"]["chapters"].map((chapters)=>(
+              <option value={chapters._id}>{chapters.chapterTitle}</option>
+            )) 
+            : null
 
-      }
-      </select>
-      {/* if statement and map loop goes here */}
-        
-      <input type="submit" value="Read chapter"/>
+        }
+        </select>
+        {/* if statement and map loop goes here */}
+          
+        {/* <input type="submit" value="Read chapter"/> */}
+        <button type="submit">Read chapter</button>
       </form>
       <div className="pages-container">
 

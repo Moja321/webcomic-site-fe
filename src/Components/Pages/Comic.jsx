@@ -72,21 +72,22 @@ const Comic = () => {
 
 
       <form onSubmit={goToChapter}>
-      <label for="chapterid">Choose a comic chapter:</label>
-      <select name="chapterid" id="chapterid" required>
-      {
-          chapters["comic"] ? 
-          chapters["comic"]["chapters"].map((chapters)=>(
-            <option value={chapters._id}>{chapters.chapterTitle}</option>
-          )) 
-          : null
+        <label for="chapterid">Choose a comic chapter:</label>
+        <select name="chapterid" id="chapterid" required>
+        {
+            chapters["comic"] ? 
+            chapters["comic"]["chapters"].map((chapters)=>(
+              <option value={chapters._id}>{chapters.chapterTitle}</option>
+            )) 
+            : null
 
-      }
-      </select>
-      {/* if statement and map loop goes here */}
-        
-      <input type="submit" value="Read chapter"/>
-      <p>locals.errorMsg || "Choose a chapter and click 'read chapter' to start reading"</p>
+        }
+        </select>
+        {/* if statement and map loop goes here */}
+          
+        {/* <input type="submit" value="Read chapter"/> */}
+        <button type="submit">Read chapter</button>
+        <p>locals.errorMsg || "Choose a chapter and click 'read chapter' to start reading"</p>
 
 
 
