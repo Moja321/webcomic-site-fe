@@ -141,11 +141,48 @@ const Login = () => {
     });
   }
 
+  const updateComic = async (input, comicId) => {
+    //await fetch backend route here
+
+    console.log("start of updateComic()");
+
+    const response = await fetch("http://localhost:3001/editcomics/" + comicId, {
+
+        method: "POST",
+        credentials: 'include',
+        
+        body: input,
+
+    });
+    const data = await response.json();
+
+    console.log("updateComic result:");
+    console.log(data);
+    //setLoggedinUser(data);
+    return data;
+
+    //maybe need to refresh the page after succes
+  }
+
   const handleUpdateComic = (event) => {
     //code for handling update comic here
     //utilise updateComic (api request)
+
+    console.log("Start of handleUpdateComic():");
+
+    //prevents page from reloading
+    event.preventDefault();
+
+    let formData = new FormData();
+    formData.append('title', event.target.title.value);
+    formData.append('comicImg', event.target.comicImg.files[0]);
+    formData.append('synopsis', event.target.synopsis.value);
+
+    let comicIdVal = comicToEdit.comic._id;
+    const update = updateComic(formData,comicIdVal);
+    console.log(update);
   }
-  
+
   const handleCreateChapter = (event) => {
     //initalise input data for createChapter and run createChapter(input)
 
@@ -246,9 +283,7 @@ const Login = () => {
      setComicToEdit({comic : target});
   }
 
-  const updateComic = async (input) => {
-    //await fetch backend route here
-  }
+  
 
   const createChapter = async (input, comicId) => {
     //TODO 10/4/25
@@ -461,7 +496,7 @@ const Login = () => {
 
             <h2>Edit existing comic - {comicToEdit.comic.title}: </h2>
             {/* <form action="/editcomics/comicid" method="POST" encType="multipart/form-data"> */}
-            <form onSubmit={handleUpdateComic}>
+            <form onSubmit={handleUpdateComic} encType="multipart/form-data">
               <label htmlFor="title">Title:</label><br/>
 
               <input 
@@ -496,10 +531,10 @@ const Login = () => {
               </output>
               <br/>
               <p>Current comic thumbnail image:</p>
-              <img src="" alt="comic main image"/><br/>
+              <img src={process.env.REACT_APP_BACK_END + comicToEdit.comic.mainImg} alt="comic main image"/><br/>
               <br/>
               <label htmlFor="synopsis">Synopsis:</label><br/>
-              <textarea id="synopsis" name="synopsis" rows="4" cols="50" defaultValue={editComic?.synopsis} required></textarea><br/>
+              <textarea id="synopsis" name="synopsis" rows="4" cols="50" defaultValue={comicToEdit.comic.synopsis} required/><br/>
               
               <button type="submit">Submit changes</button>
             </form>
