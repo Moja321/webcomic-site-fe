@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect, useContext } from 'react';
-import { Context } from '../../App';
+import { Context } from '../App';
 import {Link} from 'react-router-dom';
 
 const Comics = () => {
