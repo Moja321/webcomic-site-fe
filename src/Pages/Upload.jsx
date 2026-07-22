@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useContext } from 'react';
-import { Context } from '../../App';
+import { Context } from '../App';
 //import { data } from 'react-router-dom';
 
 const Upload = () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useContext, useEffect } from 'react';
-import { Context } from '../../App';
+import { Context } from '../App';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import EditComic from './EditComic';
 
@@ -531,7 +531,7 @@ const Login = () => {
               </output>
               <br/>
               <p>Current comic thumbnail image:</p>
-              <img src={process.env.REACT_APP_BACK_END + comicToEdit.comic.mainImg} alt="comic main image"/><br/>
+              <img src={process.env.REACT_APP_BACK_END + comicToEdit.comic.mainImg} width="200px" alt="comic main image"/><br/>
               <br/>
               <label htmlFor="synopsis">Synopsis:</label><br/>
               <textarea id="synopsis" name="synopsis" rows="4" cols="50" defaultValue={comicToEdit.comic.synopsis} required/><br/>

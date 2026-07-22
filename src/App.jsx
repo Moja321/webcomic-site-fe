@@ -7,14 +7,14 @@ import './App.css';
 
 import DarkMode from './DarkMode/DarkMode';
 import Navbar from './Components/Navbar/Navbar';
-import Comics from './Components/Pages/Comics';
-import Login from './Components/Pages/Login';
-import Home from './Components/Pages/Home';
-import About from './Components/Pages/About';
-import Upload from './Components/Pages/Upload';
-import Comic from './Components/Pages/Comic';
-import Chapter from './Components/Pages/Chapter';
-import EditComic from './Components/Pages/EditComic';
+import Comics from './Pages/Comics';
+import Login from './Pages/Login';
+import Home from './Pages/Home';
+import About from './Pages/About';
+import Upload from './Pages/Upload';
+import Comic from './Pages/Comic';
+import Chapter from './Pages/Chapter';
+import EditComic from './Pages/EditComic';
 
 export const Context = React.createContext();
 
